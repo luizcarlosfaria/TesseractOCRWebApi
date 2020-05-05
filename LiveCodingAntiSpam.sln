@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30028.174
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesseractApi", "TesseractApi\TesseractApi.csproj", "{B0803BDE-7EA9-40F2-B934-8D7E3D901A1B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B0803BDE-7EA9-40F2-B934-8D7E3D901A1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0803BDE-7EA9-40F2-B934-8D7E3D901A1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0803BDE-7EA9-40F2-B934-8D7E3D901A1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0803BDE-7EA9-40F2-B934-8D7E3D901A1B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3F5629C8-F5AF-40A5-8A3D-F597F46AB88D}
+	EndGlobalSection
+EndGlobal
