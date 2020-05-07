@@ -23,8 +23,8 @@ namespace TesseractApi.Controllers
         [HttpGet()]
         public string Get() => "OK";
 
-        [HttpPost("ocr")]
-        public async Task<string> Post(IFormFile file)
+        [HttpPost("ocr-by-upload")]
+        public async Task<string> OcrByUpload(IFormFile file)
         {
             string returnValue = null;
 
@@ -32,6 +32,14 @@ namespace TesseractApi.Controllers
             {
                 returnValue = tesseractService.DecodeFile(filePath);
             });
+
+            return returnValue;
+        }
+
+        [HttpPost("ocr-by-filepath")]
+        public string OcrByFilePath([FromBody] string fileName)
+        {
+            string returnValue = tesseractService.DecodeFile(fileName);
 
             return returnValue;
         }
