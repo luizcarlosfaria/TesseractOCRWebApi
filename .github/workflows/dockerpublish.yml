@@ -14,7 +14,7 @@ on:
   pull_request:
 
 env:  
-  IMAGE_NAME: tesseractwebapi
+  IMAGE_NAME: tesseract-ocr-aspnet-webapi
 
 jobs:
   # Run tests.
