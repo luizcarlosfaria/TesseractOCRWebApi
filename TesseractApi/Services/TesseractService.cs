@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,6 +20,9 @@ namespace TesseractApi.Services
 
         public string DecodeFile(string inputFileName)
         {
+            if (!File.Exists(inputFileName))
+                throw new FileNotFoundException("Input file does not exists", inputFileName);
+
             var outputFileNameWithoutExtension = System.IO.Path.Combine("/tmp", Guid.NewGuid().ToString("D"));
 
             var outputFileName = $"{outputFileNameWithoutExtension}.txt";

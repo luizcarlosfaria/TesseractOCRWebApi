@@ -27,10 +27,11 @@
       "applicationUrl": "http://localhost:5000"
     },
     "Docker": {
-      "commandName": "Docker",
-      "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/weatherforecast",
-      "publishAllPorts": true
+        "commandName": "Docker",
+        "commandLineArgs": "-v /c/_dev/LiveCodingAntiSpam/ocr/tests/:/test",
+        "launchBrowser": true,
+        "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/weatherforecast",
+        "publishAllPorts": true
     }
   }
 }

@@ -37,7 +37,7 @@ namespace TesseractApi.Controllers
         }
 
         [HttpPost("ocr-by-filepath")]
-        public string OcrByFilePath([FromForm] string fileName)
+        public string OcrByFilePath([FromForm][System.ComponentModel.DataAnnotations.Required] string fileName)
         {
             string returnValue = tesseractService.DecodeFile(fileName);
 
