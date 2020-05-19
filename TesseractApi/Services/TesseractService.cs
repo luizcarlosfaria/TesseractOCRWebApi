@@ -64,15 +64,23 @@ namespace TesseractApi.Services
             string error = tesseractProcess.StandardError.ReadToEnd();
 
             tesseractProcess.WaitForExit(1000 * 30);
-
-            logger.LogError($"Executed Process: {tesseractCreateInfo.FileName}");
-            logger.LogError($"Args: {tesseractCreateInfo.Arguments}");
-            logger.LogError($"Output: {output}");
-            logger.LogError($"Error: {error}");
+            
 
             if (tesseractProcess.ExitCode != 0)
             {
+                logger.LogError($"Executed Process: {tesseractCreateInfo.FileName}");
+                logger.LogError($"Args: {tesseractCreateInfo.Arguments}");
+                logger.LogError($"Output: {output}");
+                logger.LogError($"Error: {error}");
+
                 throw new InvalidOperationException($"Error on execute {tesseractCreateInfo.FileName} with args '{tesseractCreateInfo.Arguments}', exit code {tesseractProcess.ExitCode}");
+            }
+            else
+            {
+                logger.LogInformation($"Executed Process: {tesseractCreateInfo.FileName}");
+                logger.LogInformation($"Args: {tesseractCreateInfo.Arguments}");
+                logger.LogInformation($"Output: {output}");
+                logger.LogInformation($"Error: {error}");
             }
 
             return tesseractProcess.ExitCode;
