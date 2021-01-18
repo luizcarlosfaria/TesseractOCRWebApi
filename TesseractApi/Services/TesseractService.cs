@@ -23,7 +23,8 @@ namespace TesseractApi.Services
             if (!File.Exists(inputFileName))
                 throw new FileNotFoundException("Input file does not exists", inputFileName);
 
-            var outputFileNameWithoutExtension = System.IO.Path.Combine("/tmp", Guid.NewGuid().ToString("D"));
+            //Tesseract adiciona sozinho o .txt no nome do arquivo de output.
+            var outputFileNameWithoutExtension = Path.Combine(Path.GetTempPath() , Guid.NewGuid().ToString("D"));
 
             var outputFileName = $"{outputFileNameWithoutExtension}.txt";
 
@@ -33,9 +34,9 @@ namespace TesseractApi.Services
             {
                 this.ExecuteTesseractProcess($"{inputFileName} {outputFileNameWithoutExtension}");
 
-                if (System.IO.File.Exists(outputFileName))
+                if (File.Exists(outputFileName))
                 {
-                    returnValue = System.IO.File.ReadAllText(outputFileName);
+                    returnValue = File.ReadAllText(outputFileName);
                 }
             }
             catch (Exception ex)
@@ -45,7 +46,7 @@ namespace TesseractApi.Services
             }
             finally
             {
-                System.IO.File.Delete(outputFileName);
+                File.Delete(outputFileName);
             }
 
             return returnValue;

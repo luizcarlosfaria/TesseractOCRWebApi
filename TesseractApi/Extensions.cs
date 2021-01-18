@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,16 +19,16 @@ namespace TesseractApi
             }
             finally
             {
-                System.IO.File.Delete(filePath);
+                File.Delete(filePath);
             }
         }
 
 
         public static async Task<string> SaveFileOnTempDirectory(this IFormFile file)
         {
-            var filePath = System.IO.Path.Combine("/tmp/", $"{Guid.NewGuid():D}-{file.FileName}");
+            var filePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():D}-{file.FileName}");
 
-            using (var stream = System.IO.File.OpenWrite(filePath))
+            using (var stream = File.OpenWrite(filePath))
             {
                 await file.CopyToAsync(stream);
             }
