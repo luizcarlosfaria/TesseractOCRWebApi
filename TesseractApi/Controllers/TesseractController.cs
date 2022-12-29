@@ -6,44 +6,47 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TesseractApi.Services;
+using System.ComponentModel.DataAnnotations;
 
-namespace TesseractApi.Controllers
+namespace TesseractApi.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+public class TesseractController : ControllerBase
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class TesseractController : ControllerBase
+    private readonly TesseractService tesseractService;
+
+    public TesseractController(TesseractService tesseractService)
     {
-        private readonly TesseractService tesseractService;
-
-        public TesseractController(TesseractService tesseractService)
-        {
-            this.tesseractService = tesseractService;
-        }
-
-        [HttpGet()]
-        public string Get() => "OK";
-
-        [HttpPost("ocr-by-upload")]
-        public async Task<string> OcrByUpload(IFormFile file)
-        {
-            string returnValue = null;
-
-            await file.SaveFileOnTempDirectoryAndRun(filePath =>
-            {
-                returnValue = tesseractService.DecodeFile(filePath);
-            });
-
-            return returnValue;
-        }
-
-        [HttpPost("ocr-by-filepath")]
-        public string OcrByFilePath([FromForm][System.ComponentModel.DataAnnotations.Required] string fileName)
-        {
-            string returnValue = tesseractService.DecodeFile(fileName);
-
-            return returnValue;
-        }
-
-
+        this.tesseractService = tesseractService;
     }
+
+    [HttpGet()]
+    public string Get() 
+    {
+        return this.tesseractService.GetVersion();
+    }
+
+    [HttpPost("ocr-by-upload")]
+    public async Task<string> OcrByUpload(IFormFile file)
+    {
+        string returnValue = null;
+
+        await file.SaveFileOnTempDirectoryAndRun(filePath =>
+        {
+            returnValue = this.tesseractService.GetTextOfImageFile(filePath);
+        });
+
+        return returnValue;
+    }
+
+    [HttpPost("ocr-by-filepath")]
+    public string OcrByFilePath([FromForm][Required] string fileName)
+    {
+        string returnValue = this.tesseractService.GetTextOfImageFile(fileName);
+
+        return returnValue;
+    }
+
+
 }

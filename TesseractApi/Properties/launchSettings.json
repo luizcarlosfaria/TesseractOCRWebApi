@@ -1,13 +1,4 @@
 {
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:21018",
-      "sslPort": 0
-    }
-  },
-  "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
@@ -27,11 +18,20 @@
       "applicationUrl": "http://localhost:5000"
     },
     "Docker": {
-        "commandName": "Docker",
-        "commandLineArgs": "-v /c/_dev/LiveCodingAntiSpam/ocr/tests/:/test",
-        "launchBrowser": true,
-        "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/weatherforecast",
-        "publishAllPorts": true
+      "commandName": "Docker",
+      "commandLineArgs": "-v /c/_dev/LiveCodingAntiSpam/ocr/tests/:/test",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/Tesseract",
+      "publishAllPorts": true
+    }
+  },
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:21018",
+      "sslPort": 0
     }
   }
 }
