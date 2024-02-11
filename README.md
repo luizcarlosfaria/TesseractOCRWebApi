@@ -11,7 +11,7 @@ services:
 ...
 
   tesseract:
-    image: ghcr.io/luizcarlosfaria/tesseractocrwebapi/tesseract-ocr-aspnet-webapi:2.1.0
+    image: ghcr.io/luizcarlosfaria/tesseractocrwebapi/tesseract-ocr-aspnet-webapi:2.1.1
     volumes:
       - /<choose_any_path>/:/<choose_any_path>
     networks:
