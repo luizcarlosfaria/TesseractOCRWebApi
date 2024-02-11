@@ -40,7 +40,7 @@ public class TesseractService
 
         string returnValue = null;
 
-        this.ExecuteTesseractProcess($"\"{inputFileName}\" {outputFileNameWithoutExtension}");
+        _ = this.ExecuteTesseractProcess($"\"{inputFileName}\" {outputFileNameWithoutExtension}");
 
         if (outputFileName.File.Exists)
         {
@@ -65,16 +65,16 @@ public class TesseractService
 
         TimeSpan timeout = TimeSpan.FromSeconds(5);
 
-        tesseractProcess.WaitForExit((int)timeout.TotalMicroseconds);
+        _ = tesseractProcess.WaitForExit((int)timeout.TotalMicroseconds);
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine(tesseractProcess.ExitCode == 0 ? "Success" : "Error");
-        stringBuilder.AppendLine($"ExitCode: {tesseractProcess.ExitCode}");
-        stringBuilder.AppendLine($"Executed Process: '{tesseractCreateInfo.FileName}'");
-        stringBuilder.AppendLine($"Args: '{tesseractCreateInfo.Arguments}'");
-        stringBuilder.AppendLine($"Timeout: '{timeout}'");
-        stringBuilder.AppendLine($"StdOut: '{output}'");
-        stringBuilder.AppendLine($"StdErr: '{error}'");
+        _ = stringBuilder.AppendLine(tesseractProcess.ExitCode == 0 ? "Success" : "Error");
+        _ = stringBuilder.AppendLine($"ExitCode: {tesseractProcess.ExitCode}");
+        _ = stringBuilder.AppendLine($"Executed Process: '{tesseractCreateInfo.FileName}'");
+        _ = stringBuilder.AppendLine($"Args: '{tesseractCreateInfo.Arguments}'");
+        _ = stringBuilder.AppendLine($"Timeout: '{timeout}'");
+        _ = stringBuilder.AppendLine($"StdOut: '{output}'");
+        _ = stringBuilder.AppendLine($"StdErr: '{error}'");
 
         if (tesseractProcess.ExitCode != 0)
         {
