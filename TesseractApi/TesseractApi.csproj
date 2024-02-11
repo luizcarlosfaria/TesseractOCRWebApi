@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
       <Nullable>disable</Nullable>
       <ImplicitUsings>enable</ImplicitUsings>
 
       <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
       <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
-      <AnalysisLevel>latest-all</AnalysisLevel>
+      <AnalysisLevel>latest-recommended</AnalysisLevel>
 
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
   </ItemGroup>
 
 

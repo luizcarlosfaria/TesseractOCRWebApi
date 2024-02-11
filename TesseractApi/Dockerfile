@@ -1,11 +1,11 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/aspnet:7.0-jammy AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 80
 RUN apt update && apt install tesseract-ocr libtesseract-dev -y
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0-jammy AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["TesseractApi/TesseractApi.csproj", "TesseractApi/"]
 RUN dotnet restore "TesseractApi/TesseractApi.csproj"

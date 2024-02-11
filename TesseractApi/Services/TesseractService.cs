@@ -34,24 +34,17 @@ public class TesseractService
             throw new FileNotFoundException("Input file does not exists", inputFileName);
 
         //Tesseract adiciona sozinho o .txt no nome do arquivo de output.
-        string outputFileNameWithoutExtension = Path.Combine(Path.GetTempPath() , Guid.NewGuid().ToString("D"));
+        string outputFileNameWithoutExtension = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("D"));
 
-        string outputFileName = $"{outputFileNameWithoutExtension}.txt";
+        using DisposableFile outputFileName = $"{outputFileNameWithoutExtension}.txt";
 
         string returnValue = null;
 
-        try
-        {
-            this.ExecuteTesseractProcess($"\"{inputFileName}\" {outputFileNameWithoutExtension}");
+        this.ExecuteTesseractProcess($"\"{inputFileName}\" {outputFileNameWithoutExtension}");
 
-            if (File.Exists(outputFileName))
-            {
-                returnValue = File.ReadAllText(outputFileName);
-            }
-        }
-        finally
+        if (outputFileName.File.Exists)
         {
-            File.Delete(outputFileName);
+            returnValue = File.ReadAllText(outputFileName.File.FullName);
         }
 
         return returnValue;
@@ -77,7 +70,7 @@ public class TesseractService
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.AppendLine(tesseractProcess.ExitCode == 0 ? "Success" : "Error");
         stringBuilder.AppendLine($"ExitCode: {tesseractProcess.ExitCode}");
-        stringBuilder.AppendLine($"Executed Process: '{ tesseractCreateInfo.FileName}'");
+        stringBuilder.AppendLine($"Executed Process: '{tesseractCreateInfo.FileName}'");
         stringBuilder.AppendLine($"Args: '{tesseractCreateInfo.Arguments}'");
         stringBuilder.AppendLine($"Timeout: '{timeout}'");
         stringBuilder.AppendLine($"StdOut: '{output}'");
