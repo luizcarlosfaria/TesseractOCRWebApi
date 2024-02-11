@@ -1,0 +1,47 @@
+{
+	"info": {
+		"_postman_id": "b3d72809-885e-403b-9bb2-e363b32b31d4",
+		"name": "Tesseract OCR (.NET Core)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1175556"
+	},
+	"item": [
+		{
+			"name": "ocr-by-upload",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/P:/images/Anotacao-Facebook-DockerDefinitivo-Enquete-1.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:32769/tesseract/ocr-by-upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "32769",
+					"path": [
+						"tesseract",
+						"ocr-by-upload"
+					],
+					"query": [
+						{
+							"key": "file",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
