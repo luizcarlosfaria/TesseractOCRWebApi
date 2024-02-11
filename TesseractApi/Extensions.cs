@@ -9,31 +9,18 @@ namespace TesseractApi;
 
 public static class Extensions
 {
-    public static async Task SaveFileOnTempDirectoryAndRun(this IFormFile file, Action<string> action)
+    public static async Task<DisposableFile> SaveFileOnTempDirectory(this IFormFile file)
     {
-        string filePath = await file.SaveFileOnTempDirectory();
+        ArgumentNullException.ThrowIfNull(file);
 
-        try
+        DisposableFile disposableFile = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():D}-{file.FileName}");
+
+        using (FileStream stream = disposableFile.File.OpenWrite())
         {
-            action(filePath);
-        }
-        finally
-        {
-            File.Delete(filePath);
-        }
-    }
-
-
-    public static async Task<string> SaveFileOnTempDirectory(this IFormFile file)
-    {
-        string filePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():D}-{file.FileName}");
-
-        using (FileStream stream = File.OpenWrite(filePath))
-        {
-            await file.CopyToAsync(stream);
+            await file.CopyToAsync(stream).ConfigureAwait(false);
         }
 
-        return filePath;
+        return disposableFile;
     }
 
 }
