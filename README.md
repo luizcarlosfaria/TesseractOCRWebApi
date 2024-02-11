@@ -11,7 +11,7 @@ services:
 ...
 
   tesseract:
-    image: docker.pkg.github.com/luizcarlosfaria/tesseractocrwebapi/tesseract-ocr-aspnet-webapi:latest
+    image: docker.pkg.github.com/luizcarlosfaria/tesseractocrwebapi/tesseract-ocr-aspnet-webapi:2.1.0
     volumes:
       - /<choose_any_path>/:/<choose_any_path>
     networks:
