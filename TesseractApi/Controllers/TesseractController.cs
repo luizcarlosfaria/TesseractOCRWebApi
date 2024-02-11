@@ -30,12 +30,9 @@ public class TesseractController : ControllerBase
     [HttpPost("ocr-by-upload")]
     public async Task<string> OcrByUpload(IFormFile file)
     {
-        string returnValue = null;
+        using DisposableFile disposableFile = await file.SaveFileOnTempDirectory().ConfigureAwait(false);
 
-        await file.SaveFileOnTempDirectoryAndRun(filePath =>
-        {
-            returnValue = this.tesseractService.GetTextOfImageFile(filePath);
-        });
+        string returnValue = tesseractService.GetTextOfImageFile(disposableFile.File.FullName);
 
         return returnValue;
     }
