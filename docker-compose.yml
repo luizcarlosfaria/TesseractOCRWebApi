@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  tesseractapi:
+    image: ${DOCKER_REGISTRY-}tesseractapi
+    build:
+      context: .
+      dockerfile: TesseractApi/Dockerfile

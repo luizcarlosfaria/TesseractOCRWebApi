@@ -19,7 +19,7 @@
     },
     "Docker": {
       "commandName": "Docker",
-      "commandLineArgs": "-v /c/_dev/LiveCodingAntiSpam/ocr/tests/:/test",
+      "commandLineArgs": "-v /c/_dev/LiveCodingAntiSpam/ocr/tests/:/data",
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/Tesseract",
       "publishAllPorts": true

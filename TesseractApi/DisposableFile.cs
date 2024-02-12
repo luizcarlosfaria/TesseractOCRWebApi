@@ -1,15 +1,34 @@
 ﻿namespace TesseractApi;
 
-public class DisposableFile : IDisposable
+public class DisposableFile(FileInfo file) : IDisposable
 {
     private bool disposedValue;
-    private FileInfo file;
 
-    public DisposableFile(FileInfo file)
+    public FileInfo File { get; private set; } = file ?? throw new ArgumentNullException(nameof(file));
+
+    public string ReadAllText()
     {
-        this.file = file;
+        string returnValue = null;
+
+        if (this.File.Exists)
+        {
+            returnValue = System.IO.File.ReadAllText(this.File.FullName);
+        }
+
+        return returnValue;
     }
-    public FileInfo File => this.file;
+
+    public byte[] ReadAllBytes()
+    {
+        byte[] returnValue = null;
+
+        if (this.File.Exists)
+        {
+            returnValue = System.IO.File.ReadAllBytes(this.File.FullName);
+        }
+
+        return returnValue;
+    }
 
     #region Idisposable Support
 
@@ -19,26 +38,18 @@ public class DisposableFile : IDisposable
         {
             if (disposing)
             {
-                if (this.file.Exists)
-                    this.file.Delete();
+                if (this.File?.Exists ?? false)
+                {
+                    this.File.Delete();
+                    this.File = null;
+                }
             }
-
-            // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-            // TODO: set large fields to null
             disposedValue = true;
         }
     }
 
-    // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-    // ~DisposableFile()
-    // {
-    //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-    //     Dispose(disposing: false);
-    // }
-
     public void Dispose()
     {
-        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
@@ -49,7 +60,7 @@ public class DisposableFile : IDisposable
 
     public static implicit operator FileInfo(DisposableFile disposableFile)
     {
-        return disposableFile?.file;
+        return disposableFile?.File;
     }
 
     public static implicit operator DisposableFile(FileInfo file)

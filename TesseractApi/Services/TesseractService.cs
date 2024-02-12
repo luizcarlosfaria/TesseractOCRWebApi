@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,38 +20,49 @@ public class TesseractService
     }
 
 
-    public string GetVersion()
+    public async Task<string> GetVersionAsync()
     {
         int exitCode; string output; string error;
 
-        (exitCode, output, error) = this.ExecuteTesseractProcess("--version");
+        (exitCode, output, error) = await this.ExecuteTesseractProcessAsync("--version");
 
         return output;
     }
 
-    public string GetTextOfImageFile(string inputFileName)
+    public async Task<string> GetTextOfImageFileAsync(string inputFileName)
     {
-        if (!File.Exists(inputFileName))
-            throw new FileNotFoundException("Input file does not exists", inputFileName);
+        CheckInputFile(inputFileName);
 
         //Tesseract adiciona sozinho o .txt no nome do arquivo de output.
         string outputFileNameWithoutExtension = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("D"));
 
-        using DisposableFile outputFileName = $"{outputFileNameWithoutExtension}.txt";
+        using DisposableFile outputFile = $"{outputFileNameWithoutExtension}.txt";
 
-        string returnValue = null;
+        await this.ExecuteTesseractProcessAsync($"\"{inputFileName}\" {outputFileNameWithoutExtension}");
 
-        _ = this.ExecuteTesseractProcess($"\"{inputFileName}\" {outputFileNameWithoutExtension}");
-
-        if (outputFileName.File.Exists)
-        {
-            returnValue = File.ReadAllText(outputFileName.File.FullName);
-        }
+        string returnValue = outputFile.ReadAllText();
 
         return returnValue;
     }
 
-    private (int exitCode, string output, string error) ExecuteTesseractProcess(string args)
+    private static void CheckInputFile(string inputFileName)
+    {
+        if (string.IsNullOrWhiteSpace(inputFileName)) 
+            throw new ArgumentException($"'{nameof(inputFileName)}' cannot be null or whitespace.", nameof(inputFileName));
+
+
+        string[] permittedDirectories = new string[] { Path.GetTempPath(), "/data/" };
+
+        FileInfo fileInfo = new FileInfo(inputFileName);
+        if (!permittedDirectories.Any(permittedDirectory => $"{fileInfo.Directory.FullName}/".StartsWith(permittedDirectory, StringComparison.InvariantCultureIgnoreCase)))
+            throw new UnauthorizedAccessException("Input file must be in a permitted directory");
+
+        if (!File.Exists(inputFileName))
+            throw new FileNotFoundException("Input file does not exists", inputFileName);
+
+    }
+
+    private async Task<(int exitCode, string output, string error)> ExecuteTesseractProcessAsync(string args)
     {
         var tesseractCreateInfo = new ProcessStartInfo("tesseract", args)
         {
@@ -63,26 +75,29 @@ public class TesseractService
 
         string error = tesseractProcess.StandardError.ReadToEnd();
 
-        TimeSpan timeout = TimeSpan.FromSeconds(5);
+        await tesseractProcess.WaitForExitAsync();
 
-        _ = tesseractProcess.WaitForExit((int)timeout.TotalMicroseconds);
+        int exitCode = tesseractProcess.ExitCode;
 
-        StringBuilder stringBuilder = new StringBuilder();
-        _ = stringBuilder.AppendLine(tesseractProcess.ExitCode == 0 ? "Success" : "Error");
-        _ = stringBuilder.AppendLine($"ExitCode: {tesseractProcess.ExitCode}");
-        _ = stringBuilder.AppendLine($"Executed Process: '{tesseractCreateInfo.FileName}'");
-        _ = stringBuilder.AppendLine($"Args: '{tesseractCreateInfo.Arguments}'");
-        _ = stringBuilder.AppendLine($"Timeout: '{timeout}'");
-        _ = stringBuilder.AppendLine($"StdOut: '{output}'");
-        _ = stringBuilder.AppendLine($"StdErr: '{error}'");
+        StringBuilder stringBuilder = new StringBuilder()
+            .AppendLine(exitCode == 0 ? "Success" : "Error")
+            .AppendLine(CultureInfo.InvariantCulture, $"ExitCode: {exitCode}")
+            .AppendLine(CultureInfo.InvariantCulture, $"Executed Process: '{tesseractCreateInfo.FileName}'")
+            .AppendLine(CultureInfo.InvariantCulture, $"Args: '{tesseractCreateInfo.Arguments}'")
+            .AppendLine(CultureInfo.InvariantCulture, $"StdOut: '{output}'")
+            .AppendLine(CultureInfo.InvariantCulture, $"StdErr: '{error}'");
 
-        if (tesseractProcess.ExitCode != 0)
+        string logMessage = stringBuilder.ToString();
+
+        if (exitCode != 0)
         {
-            logger.LogError(stringBuilder.ToString());
+            logger.LogError(logMessage);
+
             throw new InvalidOperationException($"Error on execute {tesseractCreateInfo.FileName} with args '{tesseractCreateInfo.Arguments}', exit code {tesseractProcess.ExitCode}. Output: '{output}' Error: '{error}'");
         }
-        logger.LogInformation(stringBuilder.ToString());
 
-        return (tesseractProcess.ExitCode, output, error);
+        logger.LogInformation(logMessage);
+
+        return (exitCode, output, error);
     }
 }
