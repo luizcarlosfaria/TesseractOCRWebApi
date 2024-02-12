@@ -1,0 +1,11 @@
+version: '3.4'
+
+services:
+  tesseractapi:
+    environment:
+    - ASPNETCORE_ENVIRONMENT=Development
+    - ASPNETCORE_HTTP_PORTS=8080
+    volumes:
+    - ./ocr/tests:/data
+    ports:
+    - "8080:8080"
