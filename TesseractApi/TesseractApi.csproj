@@ -8,6 +8,7 @@
       <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
       <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
       <AnalysisLevel>latest-recommended</AnalysisLevel>
+      <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
 
   </PropertyGroup>
 
