@@ -55,3 +55,11 @@ curl --location 'http://localhost:8080/tesseract/ocr-by-filepath' \
 ## Security Considerations
 
 For security reasons, only `/tmp/` or `/data/` directories (and children) are accepted as source image directories.
+
+## Requirements
+
+This project was designed to run as a Linux Container (using docker, podman, kubernetes, or Containers as a Services platforms).
+
+If you have docker on local machine (windows or linux), clone this repo and execute `docker-compose up --build`. 
+
+If you are on Windows and you don't have docker, sorry, you can't run this project.
