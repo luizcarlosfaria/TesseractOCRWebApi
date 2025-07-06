@@ -5,4 +5,7 @@ services:
     image: ${DOCKER_REGISTRY-}tesseractapi
     build:
       context: .
+      # uncomment to build image with additional languages
+      #args:
+      # - OCR_LANGS=eng+por+rus
       dockerfile: TesseractApi/Dockerfile

@@ -18,18 +18,18 @@ public static partial class Extensions
             return await tesseractService.GetVersionAsync();
         });
 
-        tesseract.MapPost("/ocr-by-upload", async (IFormFile file, TesseractService tesseractService) =>
+        tesseract.MapPost("/ocr-by-upload", async (IFormFile file, TesseractService tesseractService, [FromQuery] string lang = "eng") =>
         {
             using DisposableFile disposableFile = await file.SaveFileOnTempDirectory().ConfigureAwait(true);
 
-            string returnValue = await tesseractService.GetTextOfImageFileAsync(disposableFile.File.FullName);
+            string returnValue = await tesseractService.GetTextOfImageFileAsync(disposableFile.File.FullName, lang);
 
             return returnValue;
         });
 
-        tesseract.MapPost("/ocr-by-filepath", async ([FromForm]string fileName, TesseractService tesseractService) =>
+        tesseract.MapPost("/ocr-by-filepath", async ([FromForm]string fileName, TesseractService tesseractService, [FromQuery] string lang = "eng") =>
         {
-            string returnValue = await tesseractService.GetTextOfImageFileAsync(fileName);
+            string returnValue = await tesseractService.GetTextOfImageFileAsync(fileName, lang);
 
             return returnValue;
         });

@@ -29,7 +29,7 @@ public class TesseractService
         return output;
     }
 
-    public async Task<string> GetTextOfImageFileAsync(string inputFileName)
+    public async Task<string> GetTextOfImageFileAsync(string inputFileName, string lang = "eng")
     {
         CheckInputFile(inputFileName);
 
@@ -37,8 +37,8 @@ public class TesseractService
         string outputFileNameWithoutExtension = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("D"));
 
         using DisposableFile outputFile = $"{outputFileNameWithoutExtension}.txt";
-
-        await this.ExecuteTesseractProcessAsync($"\"{inputFileName}\" {outputFileNameWithoutExtension}");
+        
+        await this.ExecuteTesseractProcessAsync($"\"{inputFileName}\" {outputFileNameWithoutExtension} -l {lang.Replace(' ', '+')}");
 
         string returnValue = outputFile.ReadAllText();
 
@@ -52,6 +52,13 @@ public class TesseractService
 
 
         string[] permittedDirectories = new string[] { Path.GetTempPath(), "/data/" };
+        
+        _ = Boolean.TryParse(Environment.GetEnvironmentVariable("ALLOW_URLS"), out bool urlsAllowed);
+        
+        if (urlsAllowed && inputFileName.StartsWith("https://", StringComparison.InvariantCultureIgnoreCase))
+        {
+            return;
+        }
 
         FileInfo fileInfo = new FileInfo(inputFileName);
         if (!permittedDirectories.Any(permittedDirectory => $"{fileInfo.Directory.FullName}/".StartsWith(permittedDirectory, StringComparison.InvariantCultureIgnoreCase)))

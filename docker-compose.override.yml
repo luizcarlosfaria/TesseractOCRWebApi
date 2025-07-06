@@ -3,6 +3,8 @@ version: '3.4'
 services:
   tesseractapi:
     environment:
+    # uncomment to allow using image URLs
+    #- ALLOW_URLS=true 
     - ASPNETCORE_ENVIRONMENT=Development
     - ASPNETCORE_HTTP_PORTS=8080
     volumes:

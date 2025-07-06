@@ -5,7 +5,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<TesseractService>();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 app.MapTesseractEndpoints();
 
